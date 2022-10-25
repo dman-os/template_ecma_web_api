@@ -1,0 +1,62 @@
+# TODO: migrate to pnpm
+# # build stage
+# 
+# FROM node:16-alpine AS builder
+# 
+# # add curl so that the "release command" log will be streamed to terminal
+# RUN apk --no-cache add curl
+# 
+# # create cache folder and give app folder over to node user
+# # necessary because we'll be running yarn install under node user
+# RUN mkdir -p /srv/app/.yarn/cache && chown -R node:node /srv/app/
+# 
+# USER node
+# 
+# WORKDIR /srv/app
+# 
+# COPY --chown=node:node package.json yarn.lock .yarnrc .yarnrc.yml ./
+# COPY --chown=node:node .yarn/releases .yarn/releases
+# COPY --chown=node:node .yarn/plugins .yarn/plugins
+# 
+# RUN yarn install --immutable
+# 
+# COPY --chown=node:node tsconfig.json tsconfig.build.json ./
+# COPY --chown=node:node src/ src/
+# COPY --chown=node:node scripts/ scripts/
+# # COPY --chown=node:node migrations/ migrations/
+# 
+# RUN yarn build
+# 
+# # running stage
+# FROM node:16-alpine AS prod
+# 
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
+# 
+# # create cache folder and give app folder over to node user
+# # necessary because we'll be running yarn install under node user
+# RUN mkdir -p /srv/app/.yarn/cache && \
+#     mkdir -p /srv/app/node_modules && \
+#     chown -R node:node /srv/app/
+# # RUN mkdir -p /srv/app/migrations && chown -R node:node /srv/app/migra
+# 
+# USER node
+# 
+# WORKDIR /srv/app
+# 
+# COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
+# COPY --chown=node:node .yarn/ .yarn/
+# 
+# # install only prouduction packages
+# RUN yarn workspaces focus --all --production
+# # RUN yarn install --immutable
+# 
+# # COPY . .
+# 
+# # we only need the built stuff now
+# COPY --from=builder --chown=node:node  /srv/app/dist dist/
+# 
+# # ENTRYPOINT ["yarn", "start:prod"]
+# # ENTRYPOINT ["node", "-r", ".pnp.js", "dist/main"]
+# ENTRYPOINT ["yarn", "node", "dist/main"]
+

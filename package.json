@@ -1,0 +1,46 @@
+{
+    "private": true,
+    "scripts": {
+        "test": "jest",
+        "lint": "eslint src/** tests/**",
+        "format": "prettier -w src/** tests/**",
+        "start": "tsc --build tsconfig.build.json && node dist/main",
+        "migrate:dev": "prisma migrate dev",
+        "migrate:hard-reset": "rm prisma/migrations/ -r & prisma migrate dev -n init",
+        "dev:up": "podman-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+        "dev:down": "podman-compose -f docker-compose.yml -f docker-compose.dev.yml down"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.3.3",
+        "@types/express": "^4.17.14",
+        "@types/jest": "^29.0.3",
+        "@types/node": "^18.7.19",
+        "@types/supertest": "^2.0.12",
+        "@typescript-eslint/eslint-plugin": "^5.38.0",
+        "@typescript-eslint/parser": "^5.38.0",
+        "chai": "^4.3.6",
+        "eslint": "^8.23.1",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "jest": "^29.0.3",
+        "jest-mock-extended": "^3.0.1",
+        "prettier": "^2.7.1",
+        "prisma": "^4.3.1",
+        "supertest": "^6.2.4",
+        "ts-jest": "^29.0.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.8.3"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.3.1",
+        "argon2": "^0.29.1",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.13.2",
+        "dotenv": "^16.0.2",
+        "express": "^4.18.1",
+        "express-winston": "^4.2.0",
+        "hashids": "^2.2.10",
+        "reflect-metadata": "^0.1.13",
+        "winston": "^3.8.2"
+    }
+}
